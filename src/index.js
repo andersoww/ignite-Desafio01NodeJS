@@ -91,6 +91,15 @@ app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
   // Complete aqui
+  const { id } = request.params;
+  const { customer } = request;
+  let idAlreadyExists = customer.todos.find((customer) => customer.id === id);
+  if (!idAlreadyExists) {
+    return response.status(404).json({ error: "Tarefa não existe !" });
+  }
+  const newArray = customer.todos.filter((user) => user.id !== id);
+  customer.todos = newArray;
+  return response.json(newArray);
 });
 
 module.exports = app;
